@@ -1,0 +1,31 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: ruby30-diss
+  namespace: diss
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ruby30-diss
+  template:
+    metadata:
+      labels:
+        app: ruby30-diss
+    spec:
+      containers:
+        - name: ruby30-diss
+          image: jonnyman9/ruby30-diss-service@sha256:287d70e2e8a972ae8a1503d211a8e3e2a46d36438cef9d8e653a605e0d32cc41
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

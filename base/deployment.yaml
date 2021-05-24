@@ -1,0 +1,31 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: app-diss
+  namespace: diss
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app-diss
+  template:
+    metadata:
+      labels:
+        app: app-diss
+    spec:
+      containers:
+        - name: app-diss
+          image: jonnyman9/app-diss-service
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
